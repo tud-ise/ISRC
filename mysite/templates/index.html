@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Information Systems Research Classifier</title>
+    <script src="/static/js/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  </head>
+  <body class="d-flex flex-column justify-content-center align-items-center">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand mx-auto" style="font-size: 32px"
+        >Information Systems Research Classifier</a
+      >
+    </nav>
+    <div id="fileUploadDiv">
+      <button class="btn btn-primary" id="fileUpload" onclick="uploadFiles()">
+        Upload Research Publications
+      </button>
+    </div>
+    <div id="resultTableDiv">
+      <table
+        class="table table-striped table-bordered table-hover"
+        id="resultTable"
+      >
+        <thead id="classificationHeaders">
+          <tr>
+            <th>Filename of Research Publication</th>
+            <th>Relevant for the IS Discipline?</th>
+            <th>Relevance Probability</th>
+            <th>Research Paradigm</th>
+            <th>Research Paradigm Probability</th>
+            <th>Research Method</th>
+            <th>Research Method Probability</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="classificationResults">
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="actionsDiv">
+      <button
+        class="btn btn-primary"
+        id="startClassification"
+        onclick="classify()"
+      >
+        Start Classification
+      </button>
+      <button
+        class="btn btn-primary"
+        id="exportResults"
+        onclick="exportResults()"
+      >
+        Export Results
+      </button>
+      <button class="btn btn-primary" id="dropTable" onclick="dropTable()">
+        Remove Research Publications
+      </button>
+    </div>
+    <div id="loader" class="spinner-border" role="status"></div>
+  </body>
+</html>

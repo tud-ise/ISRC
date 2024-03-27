@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Titillium+Web&display=swap');
+body {
+    /*
+    background-image: url('/static/images/background.jpg');
+    background-color: rgb(208, 212, 216);
+    background-size: cover;
+    background-repeat: no-repeat;
+    */
+    font-family: 'Titillium Web', sans-serif !important;
+}
+
+div {
+    padding: 5px; /* 10px padding on all sides */
+}
+
+.navbar {
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+#fileUploadDiv button {
+    margin-top: 10px; /* Adjust the margin as needed to control the spacing */
+}
+
+#actionsDiv button {
+    margin-right: 10px; /* Adjust the margin as needed to control the spacing */
+}
+
+button {
+    background: #005aa9 !important;
+    border-color: #005aa9 !important;
+}
+
+#loader {
+    display: none;
+    color: #005aa9;
+    margin: 20px;
+}
+
+table.table td a.delete {
+    cursor: pointer;
+    color: #005aa9;
+}
+
+table.table td a.edit {
+    cursor: pointer;
+    color: #005aa9;
+    display: none;
+}
+
+table.table td a.add {
+    cursor: pointer;
+    color: #005aa9;
+    display: none;
+}
