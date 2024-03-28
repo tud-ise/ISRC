@@ -15,7 +15,7 @@ _Pre Requirements: Python version 3.8.10_
 2. Navigate to the project directory
 3. Create a virtual environment: 
    `pip install virtualenv`
-   `python -3.8 -m venv env`
+   `py -3.8 -m venv env`
 4. Activate the virtual environment:
    - For Windows: `.\env\Scripts\activate`
    - For macOS/Linux: `source env/bin/activate`
