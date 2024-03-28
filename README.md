@@ -23,3 +23,4 @@ _Pre Requirements: Python version 3.8.10_
    `python --version`
 6. Install the required dependencies: `pip install -r requirements.txt`
 7. Run the application: `python mysite/flask_app.py`
+8. Acces the Flask App via (http://localhost:5000)
