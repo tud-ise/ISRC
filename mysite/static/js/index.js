@@ -94,50 +94,142 @@ const valueMapping = {
 	},
 };
 
+document.addEventListener('DOMContentLoaded', (event) => {
+	
+	let dropZone = document.getElementById('drop_zone');
+	dropZone.addEventListener('mouseup', (e) => {
+		uploadFiles();
+	});
+	dropZone.addEventListener('dragover', (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		e.dataTransfer.dropEffect = 'copy';
+	});
+
+	dropZone.addEventListener('drop', (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		let files = e.dataTransfer.files;
+		insertFiles(files);
+	});
+});
+
+
+
+function insertFiles(files){
+
+	// activate table and buttons
+	let buttons = document.getElementsByClassName("btn");
+	document.getElementById('resultTableDiv').style.display = 'block';
+	for (let i = 0; i < buttons.length; i++) {
+		buttons[i].style.display = "block";
+	}
+	// scroll into table
+	setTimeout(function() {
+		var element = document.getElementById('resultTableDiv');
+		var rect = element.getBoundingClientRect();
+		var scrollTop = window.scrollY || document.documentElement.scrollTop;
+		var offsetTop = rect.top + scrollTop;
+		window.scrollTo({
+			top: offsetTop-30,
+			behavior: "smooth"
+	   });
+	}, 100); 
+	
+	// Get the table header and body elements
+	var tableHeader = document.getElementById("classificationHeaders");
+	var tableBody = document.getElementById("classificationResults");
+
+	// If there are no files in the list, clear the table body
+	if (fileList.length == 0) {
+		tableBody.innerHTML = "";
+	}
+
+	// Function to check if a file with a given name exists in the list
+	function fileExists(name) {
+		for (var obj of fileList) {
+			if (obj.name === name) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	// For each selected file
+	for (var i = 0; i < files.length; i++) {
+		// If the file is not a PDF, skip it
+        if (files[i].type !== 'application/pdf') {
+            continue;
+        }
+		// If the file does not exist in the list
+		if (!fileExists(files[i].name)) {
+			// Add the file to the list
+			fileList.push(files[i]);
+
+			// Add a new row to the table
+			var row = tableBody.insertRow(tableBody.rows.length);
+
+			// Add a cell to the row and set its content to the file name
+			var cell = row.insertCell(0);
+			cell.innerHTML = files[i].name;
+
+			// For each column in the table header
+			for (
+				var j = 1;
+				j < tableHeader.getElementsByTagName("th").length;
+				j++
+			) {
+				// Add a cell to the row and leave its content empty
+				cell = row.insertCell(j);
+				cell.innerHTML = "";
+			}
+
+			// Add action buttons to the last cell of the row
+			row.cells[7].innerHTML =
+				'<a class="add" title="Save" data-toggle="tooltip" onclick="saveValues(this)"><i class="material-icons">check</i></a><a class="edit" title="Edit" data-toggle="tooltip" onclick="editRow(this)"><i class="material-icons">&#xE254;</i></a><a class="delete" title="Delete" data-toggle="tooltip" onclick="deleteRow(this)"><i class="material-icons">&#xE872;</i></a>';
+		}
+	}
+	if (fileList.length > 0) {
+		// if there are files in the list, make the dropzone smaller
+		document.getElementById("drop_zone").classList.add("drop-zone-small");
+	}
+	additionalButtons();
+
+}
+
+function additionalButtons() {
+	var startClassificationButton = document.getElementById("startClassification");
+	var secondaryButtonsDiv = document.getElementById("secondaryButtons");
+
+	if (startClassificationButton.offsetTop > 965) {
+		secondaryButtonsDiv.style.display = "inherit";
+	} else {
+		secondaryButtonsDiv.style.display = "none";
+	}
+}
+
 function uploadFiles() {
-	var input = document.createElement("input");
-	input.type = "file";
-	input.accept = ".pdf";
-	input.multiple = true;
-	input.onchange = function (event) {
-		var newfiles = event.target.files;
-		var tableHeader = document.getElementById("classificationHeaders");
-		var tableBody = document.getElementById("classificationResults");
 
-		if (fileList.length == 0) {
-			tableBody.innerHTML = "";
-		}
+    // Create a new input element
+    var input = document.createElement("input");
 
-		function fileExists(name) {
-			for (var obj of fileList) {
-				if (obj.name === name) {
-					return true;
-				}
-			}
+    // Set the input type to file
+    input.type = "file";
 
-			return false;
-		}
+    // Only accept .pdf files
+    input.accept = ".pdf";
 
-		for (var i = 0; i < newfiles.length; i++) {
-			if (!fileExists(newfiles[i].name)) {
-				fileList.push(newfiles[i]);
-				var row = tableBody.insertRow(tableBody.rows.length);
-				var cell = row.insertCell(0);
-				cell.innerHTML = newfiles[i].name;
-				for (
-					var j = 1;
-					j < tableHeader.getElementsByTagName("th").length;
-					j++
-				) {
-					cell = row.insertCell(j);
-					cell.innerHTML = "";
-				}
-				row.cells[7].innerHTML =
-					'<a class="add" title="Save" data-toggle="tooltip" onclick="saveValues(this)"><i class="material-icons">check</i></a><a class="edit" title="Edit" data-toggle="tooltip" onclick="editRow(this)"><i class="material-icons">&#xE254;</i></a><a class="delete" title="Delete" data-toggle="tooltip" onclick="deleteRow(this)"><i class="material-icons">&#xE872;</i></a>';
-			}
-		}
-	};
-	input.click();
+    // Allow multiple files to be selected
+    input.multiple = true;
+
+    // When files are selected, this function will be called
+    input.onchange = function (event) {
+		insertFiles(event.target.files);
+    };
+
+    // Programmatically click the input element to open the file dialog
+    input.click();
 }
 
 function exportResults() {
@@ -172,7 +264,7 @@ function exportResults() {
 
 function classify() {
 	// Show the waiting icon
-	document.getElementById("loader").style.display = "block";
+	document.getElementById("loader").style.display = "flex";
 	disableButtons(true);
 	var table = document.getElementById("classificationResults");
 	function alreadyClassified(filename) {
@@ -212,7 +304,7 @@ function classify() {
 			for (var i = 0; i < rows.length; i++) {
 				var row = rows[i];
 				var cells = row.cells;
-
+				
 				// Assuming you have a "label" for each row
 				var filename = cells[0].textContent;
 
@@ -247,6 +339,12 @@ function classify() {
 					// Handle the case where the label doesn't exist in the "result" object
 					console.log("Label not found in result:", filename);
 				}
+
+				// lowlight row if no context
+				if (cells[1].textContent == "No"){
+					row.classList.add("noIS")
+				}
+
 			}
 		})
 		.catch((error) => {
@@ -311,16 +409,20 @@ function deleteRow(row) {
 	}
 	var tableBody = document.getElementById("classificationResults");
 	if (tableBody.rows.length == 0) {
+		document.getElementById("drop_zone").classList.remove("drop-zone-small");
 		tableBody.innerHTML =
-			"<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+		"<tr><td><div class='min-height'></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
 	}
+	additionalButtons();
 }
 
 function dropTable() {
 	var tableBody = document.getElementById("classificationResults");
+	document.getElementById("drop_zone").classList.remove("drop-zone-small");
 	tableBody.innerHTML =
-		"<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+	"<tr><td><div class='min-height'></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
 	fileList = [];
+	additionalButtons();
 }
 
 function editRow(editButton) {
@@ -399,4 +501,9 @@ function saveValues(saveButton){
 	cells[6].innerText = "";
 	saveButton.style.display = "none"
 	selectedRow.getElementsByClassName("edit")[0].style.display = "inline";
+
+	// remove lowlight row if context
+	if (cells[1].textContent == "Yes"){
+		selectedRow.classList.remove("noIS")
+	}
 }
