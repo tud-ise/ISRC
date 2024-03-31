@@ -1,5 +1,6 @@
-# ISRC
-Information Systems Research Classifier
+# Information Systems Research Classifier (ISRC) 
+
+*Please cite as* Schmidt, Jan-Hendrik; Goutier, Marc; Koch, Ludwig; Schwinghammer, Ronja; and Benlian, Alexander, “Automatic Classification of IS Research Papers: A Design Science Approach” (2024). ECIS 2024 Proceedings.
 
 ## Installation
 
